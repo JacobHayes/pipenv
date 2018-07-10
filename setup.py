@@ -7,14 +7,15 @@ from shutil import rmtree
 
 from setuptools import find_packages, setup, Command
 
-here = os.path.abspath(os.path.dirname(__file__))
+os.chdir("src")
+root = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as f:
+with codecs.open(os.path.join(root, "README.md"), encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
 about = {}
 
-with open(os.path.join(here, "pipenv", "__version__.py")) as f:
+with open(os.path.join(root, "src/pipenv", "__version__.py")) as f:
     exec(f.read(), about)
 
 if sys.argv[-1] == "publish":
@@ -53,7 +54,7 @@ class DebCommand(Command):
     def run(self):
         try:
             self.status("Removing previous builds…")
-            rmtree(os.path.join(here, "deb_dist"))
+            rmtree(os.path.join(root, "deb_dist"))
         except FileNotFoundError:
             pass
         self.status(u"Creating debian mainfest…")
@@ -85,7 +86,7 @@ class UploadCommand(Command):
     def run(self):
         try:
             self.status("Removing previous builds…")
-            rmtree(os.path.join(here, "dist"))
+            rmtree(os.path.join(root, "dist"))
         except FileNotFoundError:
             pass
         self.status("Building Source distribution…")
